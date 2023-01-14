@@ -1,7 +1,7 @@
 class CameraAndLensCalculator():
   def __init__(self):
     self.arcseconds_per_radian = 206.265
-    self.pixel_size = self.focal_length = self.angular_obj_size = self.lp_mm = self.focal_length = None
+    self.pixel_size = self.focal_length = self.angular_obj_size = self.lp_mm = self.focal_length = self.f_stop = None
   def get_arc_sec_per_pixel(self):
     # This formula calculates the number of arcseconds per pixel in an image, based on the size of the camera's pixels and the focal length of the lens.
     self.arc_sec_per_pixel = (self.arcseconds_per_radian * self.pixel_size) / self.focal_length
@@ -20,5 +20,12 @@ class CameraAndLensCalculator():
     #Arcsecond Resolution = (206.265 * Image Scale) / (Focal Length * lp/mm)
     lens_arc_resolution = (self.arcseconds_per_radian * self.image_scale) / (self.focal_length * self.lp_mm)
     return self.lens_arc_resolution
+  def get_lens_aperture_diameter(self):
+    # Used for getting the brightness ratio of two lenses
+    self.lens_aperture_diameter = (self.focal_length / self.f_stop)
+    return self.lens_aperture_diameter
+  def get_brightness_ratio_two_lenses(self):
+    # Brightness Ratio = (aperture Diameter of Lens^2) / (Aperture Diameter of Telescope^2)
+    return 0
   if __name__ == '__main__':
     return 0
