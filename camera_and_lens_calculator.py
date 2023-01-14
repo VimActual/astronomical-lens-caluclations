@@ -26,6 +26,9 @@ class CameraAndLensCalculator():
     return self.lens_aperture_diameter
   def get_brightness_ratio_two_lenses(self):
     # Brightness Ratio = (aperture Diameter of Lens^2) / (Aperture Diameter of Telescope^2)
-    return 0
+    self.lens1_aperture = (self.focal_length / self.f_stop)
+    self.lens2_aperture = (self.focal_length_2 / self.f_stop_2)
+    self.brightness_ratio = (self.lens1_aperture_diameter**2) / (self.lens2_aperture_diameter**2
+    return self.brightness_ratio
   if __name__ == '__main__':
     return 0
