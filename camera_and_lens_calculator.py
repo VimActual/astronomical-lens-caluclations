@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from inspect import signature
 # units are assumed to be in mm and arcseconds
 class CameraAndLensCalculator():
     def __init__(self, **data):
@@ -35,9 +36,9 @@ class CameraAndLensCalculator():
             if 'focal_length' in self.data["lens_1"] and 'f_stop' in self.data["lens_1"]:
                 self.get_lens_aperture_diameter()
                 done += 1
-            if 'focal_length' in self.data["lens_1"] and 'f_stop' in self.data["lens_1"] and 'focal_length_2' in self.data["lens_2"] and 'f_stop_2' in self.data["lens_2"]:
-                self.get_brightness_ratio_two_lenses()
-                done += 1
+            #if 'focal_length' in self.data["lens_1"] and 'f_stop' in self.data["lens_1"] and 'focal_length_2' in self.data["lens_2"] and 'f_stop_2' in self.data["lens_2"]:
+            #    self.get_brightness_ratio_two_lenses(self)
+            #    done += 1
             if 'brightness_ratio' in self.data["lens_1"]:
                 self.get_brightness_factor()
                 done += 1
@@ -83,11 +84,16 @@ class CameraAndLensCalculator():
         self.data['lens_1']['lens_aperture_diameter'] = (self.data['lens_1']['focal_length'] / self.data['lens_1']['f_stop'])
         return self.data['lens_1']['lens_aperture_diameter']
     
-    def get_brightness_ratio_two_lenses(self):
+    def get_brightness_ratio_two_lenses(self, compareLens):
     # Brightness Ratio = (aperture Diameter of Lens^2) / (Aperture Diameter of Telescope^2)
+        cLens = compareLens
+        cLensAD = cLens.data['lens_1']['lens_aperture_diameter']
+        self.data['lens_1']['brightness_ratio'] = (self.data['lens_1']['lens_aperture_diameter']**2) / cLensAD
+        '''
         self.lens1_aperture_diameter = (self.data['lens_1']['focal_length'] / self.data['lens_1']['f_stop'])
         self.lens2_aperture_diameter = (self.data['lens_2']['focal_length_2'] / self.data['lens_2']['f_stop_2'])
         self.data['lens_1']['brightness_ratio'] = (self.lens1_aperture_diameter**2) / (self.lens2_aperture_diameter**2)
+        '''
         return self.data['lens_1']['brightness_ratio']
 
     def get_brightness_factor(self):
@@ -101,6 +107,7 @@ if __name__ == '__main__':
     print("\nCanon 80D: Canon 250mm vs Orion 8xt as brightness_factor_lens2, focal_lenght2, f_stop_2")
     calc2 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens_1={'focal_length':250, 'lp_mm':44.00, 'f_stop':5.6}, object={'obj_angular_size':50,'obj_au':3.95}, lens_2={'focal_length_2':1219, 'f_stop_2':5.9})
     calc2.get_data()
+    print(calc2.get_brightness_ratio_two_lenses(calc1))
     print("\nCanon 80D: Orion xt6\" vs Orion 8xt brightness_factor_lens2, focal_lenght2, f_stop_2")
     calc3 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens_1={'focal_length':1178, 'f_stop':7.8}, object={'obj_angular_size':50,'obj_au':3.95}, lens_2={'focal_length_2':1219, 'f_stop_2':5.9})
     calc3.get_data()
