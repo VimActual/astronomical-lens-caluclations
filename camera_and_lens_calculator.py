@@ -3,7 +3,6 @@ class CameraAndLensCalculator():
         self.arcseconds_per_radian = 206.265
         self.data = data
         self.calculate_all()
-        print(self.data)
 
     def calculate_all(self):
         if 'pixel_size' in self.data and 'focal_length' in self.data:
@@ -18,6 +17,10 @@ class CameraAndLensCalculator():
             self.get_lens_aperture_diameter()
         if 'focal_length' in self.data and 'f_stop' in self.data and 'focal_length_2' in self.data and 'f_stop_2' in self.data:
             self.get_brightness_ratio_two_lenses()
+
+    def get_data(self):
+        for data in self.data:
+            print(f'{data:<25}: {round(self.data[data], 2)}')
 
     def get_camera_arc_sec_per_pixel(self):
     # This formula calculates the number of arcseconds per pixel in an image, based on the size of the camera's pixels and the focal length of the lens.
@@ -55,3 +58,4 @@ class CameraAndLensCalculator():
 if __name__ == '__main__':
     calc = CameraAndLensCalculator()
     calc2 = CameraAndLensCalculator(pixel_size=3.7, focal_length=250, angular_obj_size=50, obj_au=3.95, lp_mm=44, f_stop=5.6, focal_length_2=1219, f_stop_2=5.9)
+    calc2.get_data()
