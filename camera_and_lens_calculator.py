@@ -81,25 +81,28 @@ class CameraAndLensCalculator():
     # Brightness Ratio = (aperture Diameter of Lens^2) / (Aperture Diameter of Telescope^2)
         cLens = compareLens
         cLensAD = cLens.data['lens']['lens_aperture_diameter']
-        self.data['lens']['brightness_ratio'] = (self.data['lens']['lens_aperture_diameter']**2) / cLensAD
-        return self.data['lens']['brightness_ratio']
+        cLensFS = cLens.data['lens']['f_stop']
+        brightness_ratio = round((self.data['lens']['lens_aperture_diameter'] / cLensAD)**2 / (self.data['lens']['f_stop'] / cLensFS), 2)
+        return brightness_ratio
 
     def get_brightness_factor(self, compareLens):
         cLens = compareLens
-        cLens_brightness_ratio = 1 / self.data['lens']['brightness_ratio']
+        cLensAD = cLens.data['lens']['lens_aperture_diameter']
+        cLens_brightness_ratio = (1 / (self.data['lens']['lens_aperture_diameter']**2) / cLensAD)
         return cLens_brightness_ratio
 
 if __name__ == '__main__':
-    print("\nCanon 80D: Canon 250mm vs Orion 6xt as brightness_factor_lens2, focal_lenght2, f_stop_2")
-    calc1 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens={'focal_length':250, 'lp_mm':44.00, 'f_stop':5.6}, object={'obj_angular_size':50,'obj_au':3.95})
+    print("\nCanon 80D Paired with Canon 250mm")
+    calc1 = CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Canon 250 f/5.6','focal_length':250, 'lp_mm':44.00, 'f_stop':5.6}, object={'obj_angular_size':50,'obj_au':3.95})
     calc1.get_data()
-    print("\nCanon 80D: Canon 250mm vs Orion 8xt as brightness_factor_lens2, focal_lenght2, f_stop_2")
-    calc2 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens={'focal_length':250, 'lp_mm':44.00, 'f_stop':5.6}, object={'obj_angular_size':50,'obj_au':3.95})
+    print("\nCanon 80D Paired with Orion XT6")
+    calc2 = CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Orion XT6', 'focal_length':1178, 'f_stop':7.8}, object={'obj_angular_size':50,'obj_au':3.95})
     #print(calc2.get_brightness_ratio_two_lenses(calc1))
     calc2.get_data()
-    print("\nCanon 80D: Orion xt6\" vs Orion 8xt brightness_factor_lens2, focal_lenght2, f_stop_2")
-    calc3 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens={'focal_length':1178, 'f_stop':7.8}, object={'obj_angular_size':50,'obj_au':3.95})
+    print("\nCanon 80D Paired with Orion XT8")
+    calc3 = CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Orion XT8', 'focal_length':1219, 'f_stop':5.9}, object={'obj_angular_size':50,'obj_au':3.95})
     calc3.get_data()
-    print("\nCanon 80D: Orion xt8\" vs Canon 250mm")
-    calc4 = CameraAndLensCalculator(camera={'pixel_size':3.7}, lens={'focal_length':1219, 'f_stop':5.9}, object={'obj_angular_size':50,'obj_au':3.95})
-    calc4.get_data()
+    print(f"Using the Canon 80D the {calc1.data['lens']['Make_Model']} is {calc1.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc2.data['lens']['Make_Model']} is {calc2.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
