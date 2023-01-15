@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# units are assumed to be in mm and arcseconds
 class CameraAndLensCalculator():
     def __init__(self, **data):
         self.arcseconds_per_radian = 206.265
@@ -11,9 +12,7 @@ class CameraAndLensCalculator():
     def calculate_all(self):
         previous_done = 0
         done = 0
-        print("just before while loop")
         while done <= previous_done:
-            print("Now starting while loop")
             previous_done = done
             if 'pixel_size' in self.data and 'focal_length' in self.data:
                 self.get_camera_arc_sec_per_pixel()
@@ -90,15 +89,15 @@ class CameraAndLensCalculator():
 
 if __name__ == '__main__':
     #calc = CameraAndLensCalculator()
-    print("\nCanon 80D with 250 comapaired with 6xt")
+    print("\nCanon 80D: Canon 250mm vs Orion 6xt as brightness_factor_lens2, focal_lenght2, f_stop_2")
     calc2 = CameraAndLensCalculator(pixel_size=3.7, focal_length=250, obj_angular_size=50, obj_au=3.95, lp_mm=44, f_stop=5.6, focal_length_2=1178, f_stop_2=7.8)
     calc2.get_data()
-    print("\nCanon 80D with 250 comapaired with 8xt")
+    print("\nCanon 80D: Canon 250mm vs Orion 8xt as brightness_factor_lens2, focal_lenght2, f_stop_2")
     calc3 = CameraAndLensCalculator(pixel_size=3.7, focal_length=250, obj_angular_size=50, obj_au=3.95, lp_mm=44, f_stop=5.6, focal_length_2=1219, f_stop_2=5.9)
     calc3.get_data()
-    print("\nCanon 80D 6\" compaired with 8xt")
+    print("\nCanon 80D: Orion xt6\" vs Orion 8xt brightness_factor_lens2, focal_lenght2, f_stop_2")
     calc4 = CameraAndLensCalculator(pixel_size=3.7, focal_length=1178, obj_angular_size=50, obj_au=3.95, f_stop=7.8, focal_length_2=1219, f_stop_2=5.9)
     calc4.get_data()
-    print("\nCanon 80D 8\" compaired with 8xt")
+    print("\nCanon 80D: Orion xt8\" compaired with 8xt")
     calc4 = CameraAndLensCalculator(pixel_size=3.7, focal_length=1219, obj_angular_size=50, obj_au=3.95, f_stop=5.9, focal_length_2=1219, f_stop_2=5.9)
     calc4.get_data()
