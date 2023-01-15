@@ -3,7 +3,7 @@ class CameraAndLensCalculator():
         self.arcseconds_per_radian = 206.265
         self.kwargs = kwargs
         
-    def get_arc_sec_per_pixel(self):
+    def get_camera_arc_sec_per_pixel(self):
     # This formula calculates the number of arcseconds per pixel in an image, based on the size of the camera's pixels and the focal length of the lens.
         self.arc_sec_per_pixel = (self.arcseconds_per_radian * self.kwargs['pixel_size']) / self.kwargs['focal_length']
         return self.arc_sec_per_pixel
