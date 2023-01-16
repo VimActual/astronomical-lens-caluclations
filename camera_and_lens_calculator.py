@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from inspect import signature
 # units are assumed to be in mm and arcseconds
 class CameraAndLensCalculator():
     def __init__(self, **data):
@@ -102,7 +101,16 @@ if __name__ == '__main__':
     print("\nCanon 80D Paired with Orion XT8")
     calc3 = CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Orion XT8', 'focal_length':1219, 'f_stop':5.9}, object={'obj_angular_size':50,'obj_au':3.95})
     calc3.get_data()
+    print("\nCanon 80D Paired with Orion AstroView")
+    calc4 =  CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Orion AstroView', 'focal_length':910, 'f_stop':10.1}, object={'obj_angular_size':50,'obj_au':3.95})
+    calc4.get_data()
+    print(f"\nCanon 80D Paired with {calc4.data['lens']['Make_Model']}")
+    calc5 = CameraAndLensCalculator(camera={'Make_Model':'Canon 80D', 'pixel_size':3.7}, lens={'Make_Model':'Sky-Watcher N 200/1000 Explorer 200P OTA', 'focal_length':1000, 'f_stop':5}, object={'obj_angular_size':50,'obj_au':3.95})
+    calc5.get_data()
     print(f"Using the Canon 80D the {calc1.data['lens']['Make_Model']} is {calc1.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
     print(f"Using the Canon 80D the {calc2.data['lens']['Make_Model']} is {calc2.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
     print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
     print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc4.data['lens']['Make_Model']} is {calc4.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc4.data['lens']['Make_Model']} is {calc4.get_brightness_ratio_two_lenses(calc3)} brighter than {calc3.data['lens']['Make_Model']}")
+    print(f"Using the Canon 80D the {calc5.data['lens']['Make_Model']} is {calc5.get_brightness_ratio_two_lenses(calc3)} brighter than {calc1.data['lens']['Make_Model']}")
