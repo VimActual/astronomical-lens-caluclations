@@ -45,6 +45,7 @@ class CameraAndLensCalculator():
         done = 0
         while done <= previous_done:
             previous_done = done
+            #print(f'previ: {previous_done}\tdone" {done}')
             if 'pixel_size' in self.data["camera"] and 'focal_length' in self.data["lens"]:
                 self.get_camera_arc_sec_per_pixel()
                 done += 1
@@ -63,6 +64,9 @@ class CameraAndLensCalculator():
             if 'lens_arc_resolution' in self.data["lens"] and 'image_scale' in self.data["image_qualities"]:
                 self.get_lens_llmp()
                 done += 1
+            if 'price' in self.data['lens'] and 'obj_final_pixel_width' in self.data['image_qualities']:
+                self.get_price_per_pixel()
+                done +=1
 
     def get_data(self):
         for equipment in self.data:
@@ -119,50 +123,38 @@ class CameraAndLensCalculator():
         cLens_brightness_ratio = (1 / (self.data['lens']['lens_aperture_diameter']**2) / cLensAD)
         return cLens_brightness_ratio
 
+    def get_price_per_pixel(self):
+        self.data['image_qualities']['price_per_pixel'] = round(self.data['lens']['price'] / self.data['image_qualities']['obj_final_pixel_width'], 2)
+
 if __name__ == '__main__':
     perf = SimulatedObjImage
     celestial_object = {'obj_angular_size':50,'obj_au':3.95}
     canon80D = {'Make_Model':'Canon 80D', 'pixel_size':3.7}
-    canon250_f5_6 = {'Make_Model':'Canon 250 f/5.6','focal_length':250, 'lp_mm':44.00, 'f_stop':5.6}
-    tokina11_f2_8 = {'Make_Model':'Tokina 11 2.8', 'focal_length':11, 'f_stop':2.8}
-    #80D_Canon250_f5_6 = perf(canon80D, canon250_f5_6, celestial_object)
-    print("\nCanon 80D Paired with Canon 250mm")
-    calc1 = CameraAndLensCalculator(camera=canon80D, lens=canon250_f5_6, object=celestial_object)
-    calc1.get_data()
-    print("\nCanon 80D Paired with Orion XT6")
-    calc2 = CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'Orion XT6', 'focal_length':1178, 'f_stop':7.8}, object=celestial_object)
-    calc2.get_data()
-    print("\nCanon 80D Paired with Orion XT8")
-    calc3 = CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'Orion XT8', 'focal_length':1219, 'f_stop':5.9}, object=celestial_object)
-    calc3.get_data()
-    print("\nCanon 80D Paired with Orion AstroView")
-    calc4 =  CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'Orion AstroView', 'focal_length':910, 'f_stop':10.1}, object=celestial_object)
-    calc4.get_data()
-    calc5 = CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'Sky-Watcher N 200/1000 Explorer 200P OTA', 'focal_length':1000, 'f_stop':5}, object=celestial_object)
-    print(f"\nCanon 80D Paired with {calc5.data['lens']['Make_Model']}")
-    calc5.get_data()
-    calc6 = CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'Fluorostar 156', 'focal_length':1217, 'f_stop':7.8}, object=celestial_object)
-    print(f"\nCanon 80D Paired with {calc6.data['lens']['Make_Model']}")
-    calc6.get_data()
-    calc7 = CameraAndLensCalculator(camera=canon80D, lens={'Make_Model':'RedCat 71 APO', 'focal_length':350, 'f_stop':4.9}, object=celestial_object)
-    print(f"\nCanon 80D Paired with {calc7.data['lens']['Make_Model']}")
-    calc7.get_data()
-    calc8 = CameraAndLensCalculator(camera=canon80D, lens=tokina11_f2_8, object=celestial_object)
-    print(f"\nCanon 80D Paired with {calc8.data['lens']['Make_Model']}")
-    calc8.get_data()
-    print(f"Using the Canon 80D the {calc1.data['lens']['Make_Model']} is {calc1.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc2.data['lens']['Make_Model']} is {calc2.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc3.data['lens']['Make_Model']} is {calc3.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc4.data['lens']['Make_Model']} is {calc4.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc4.data['lens']['Make_Model']} is {calc4.get_brightness_ratio_two_lenses(calc3)} brighter than {calc3.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc5.data['lens']['Make_Model']} is {calc5.get_brightness_ratio_two_lenses(calc3)} brighter than {calc3.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc5.data['lens']['Make_Model']} is {calc5.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc6.data['lens']['Make_Model']} is {calc6.get_brightness_ratio_two_lenses(calc7)} brighter than {calc7.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc7.data['lens']['Make_Model']} is {calc7.get_brightness_ratio_two_lenses(calc6)} brighter than {calc6.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc6.data['lens']['Make_Model']} is {calc6.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc7.data['lens']['Make_Model']} is {calc7.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc8.data['lens']['Make_Model']} is {calc8.get_brightness_ratio_two_lenses(calc1)} brighter than {calc1.data['lens']['Make_Model']}")
-    print(f"Using the Canon 80D the {calc1.data['lens']['Make_Model']} is {calc1.get_brightness_ratio_two_lenses(calc8)} brighter than {calc2.data['lens']['Make_Model']}")
-
-
+    # Lenses
+    lenses = {}
+    lenses['Canon 250mm f/5.6'] = {'Brand':'Canon', 'Model': 'EFS 55-250', 'type': 'lens', 'focal_length':250, 'lp_mm':44.00, 'f_stop':5.6, 'price': 300}
+    lenses['Tokina 11 f/2.8'] = {'Brand': 'Tokina', 'Model': '11-16', 'type': 'lens', 'focal_length':11, 'f_stop':2.8, 'price': 274}
+    lenses['Celestron 70'] = {'Brand':'Celestron', 'Model': '70mm f/5.7', 'type': 'refractor', 'focal_length':400, 'f_stop':5.7, 'price' : 120}
+    lenses['Celestron 130'] = {'Brand':'Celestron', 'Model': '130mm f/5.0', 'type': 'refractor', 'focal_length':650, 'f_stop':5.0, 'price' : 480}
+    lenses['Redcat_flouostar'] = {'Brand':'Fluorostar', 'Model': '156', 'type': 'refractor', 'focal_length':1217, 'f_stop':7.8, 'price': 7200}
+    lenses['Redcat 71'] = {'Brand':'RedCat', 'Model': '71 APO', 'focal_length':350, 'f_stop':4.9, 'price': 1700}
+    lenses['Skywatcher 200/1000'] = {'Brand':'Sky-Watcher', 'Model': 'N 200/1000 Explorer 200P OTA', 'focal_length':1000, 'f_stop':5, 'price': 500}
+    lenses['Orion Astroview 6'] = {'Brand':'Orion', 'Model': 'AstroView 6" EQ Equatorial Reflector', 'focal_length':750, 'f_stop':5.0, 'price' : 600}
+    lenses['Orion XT6'] = {'Brand':'Orion', 'Model': 'XT6', 'focal_length':1178, 'f_stop':7.8, 'price' : 600}
+    lenses['Orion XT8'] = {'Brand':'Orion', 'Model': ' XT8', 'focal_length':1219, 'f_stop':5.9, 'price' : 700}
+    lenses['Orion Newtonian 8'] = {'Brand':'Orion', 'Model': '8" f/4 Newtonian Reflector Astrograph', 'focal_length':800, 'f_stop':4.0, 'price': 700}
+    lenses['Orion Newtonian 10'] = {'Brand':'Orion', 'Model': '10" f/4 Newtonian Reflector Astrograph', 'focal_length':1000, 'f_stop':4.0, 'price': 900}
+    lenses['Orion BL135'] = {'Brand':'Orion', 'Model': 'BL135mm', 'focal_length':1100, 'f_stop':8.1, 'price' : 330}
+    canon80D_combos = [CameraAndLensCalculator(camera=canon80D, lens=lens, object=celestial_object) for lens in lenses.values()]
+    ppp = {}
+    for combo in canon80D_combos:
+        ppp[combo.data['lens']['Brand'] + combo.data['lens']['Model']] = combo.data['image_qualities']['price_per_pixel']
+    ppp = dict(sorted(ppp.items(), key=lambda item: item[1]))
+    for lens in ppp:
+        print(f'lens: {lens:<45}\tprice ratio: {ppp[lens]}')
+    #print(f"Using the Canon 80D the {calc1.data['lens']['Make_Model']} is {calc1.get_brightness_ratio_two_lenses(calc2)} brighter than {calc2.data['lens']['Make_Model']}")
+    #print(canon80D_combos[0])
+    '''
+    print(f"Using the Canon 80D the {calc13.data['lens']['Make_Model']} is {calc13.get_brightness_ratio_two_lenses(calc3)} brighter than {calc3.data['lens']['Make_Model']}")
+    #print(f"Using the Canon 80D the {calc11.data['lens']['Make_Model']} is {calc11.get_brightness_ratio_two_lenses(calc3)} brighter than {calc3.data['lens']['Make_Model']}")
+    '''
